@@ -5,14 +5,19 @@ import random
 pygame.init()
 
 # initialize app parameters
-width, height = 1200, 800
+width, height = 1600, 1000
 screen = pygame.display.set_mode((width, height))
 
 clock = pygame.time.Clock()
 running = True
 
 # the title of this application
-pygame.display.set_caption("youtube shorts-esque ball collision simulator")
+pygame.display.set_caption("let's bounce")
+
+background = pygame.image.load("background.png").convert()
+
+# Scale the background image to fit the screen if necessary
+background = pygame.transform.scale(background, (width, height))
 
 # future sound for clicks
 click_sound = pygame.mixer.Sound("click.wav")
@@ -21,7 +26,7 @@ click_sound = pygame.mixer.Sound("click.wav")
 # ball parameters
 ball_radius = 20
 
-BALL_COLOR = (255, 0, 0)
+BALL_COLOR = (255, 255, 255)
 class Ball:
     def __init__(self, x, y):
         self.x = x
@@ -29,10 +34,20 @@ class Ball:
         self.dx = 0
         self.dy = 0
         self.acceleration = 0.5
-        self.max_speed = 10
+        self.max_speed = 30
         self.friction = 0.98
 
     def move(self):
+        # consider next x/y position
+        next_x = self.x + self.dx
+        next_y = self.y + self.dy
+        
+        if next_x < ball_radius or next_x > width - ball_radius:
+            self.dx = -self.dx  # Reverse x direction
+        if next_y < ball_radius or next_y > height - ball_radius:
+            self.dy = -self.dy  # Reverse y direction
+        
+        # Now apply the (possibly reversed) movement
         self.x += self.dx
         self.y += self.dy
         
@@ -40,7 +55,7 @@ class Ball:
         self.dx *= self.friction
         self.dy *= self.friction
         
-        # Keep ball within screen bounds
+        # Ensure the ball stays within bounds
         self.x = max(ball_radius, min(width - ball_radius, self.x))
         self.y = max(ball_radius, min(height - ball_radius, self.y))
 
@@ -61,13 +76,11 @@ class Ball:
 ball = Ball(width // 2, height // 2)
 
 while running:
-    # poll for events
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
 
-    # fill the screen with a color to wipe away anything from last frame
-    screen.fill("purple")
+    screen.blit(background, (0, 0))
 
     # Handle input
     keys = pygame.key.get_pressed()
