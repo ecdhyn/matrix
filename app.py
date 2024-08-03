@@ -44,8 +44,10 @@ class Ball:
         
         if next_x < ball_radius or next_x > width - ball_radius:
             self.dx = -self.dx  # Reverse x direction
+            click_sound.play()
         if next_y < ball_radius or next_y > height - ball_radius:
             self.dy = -self.dy  # Reverse y direction
+            click_sound.play()
         
         # Now apply the (possibly reversed) movement
         self.x += self.dx
