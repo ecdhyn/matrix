@@ -73,27 +73,27 @@ def check_collision(ball1, ball2):
     distance = math.sqrt(dx**2 + dy**2)
     
     if distance < 2 * ball_radius:
-        # Collision detected, calculate new velocities
+        # collision detected, calculate new velocities
         angle = math.atan2(dy, dx)
         sin = math.sin(angle)
         cos = math.cos(angle)
         
-        # Rotate velocities
+        # rotate velocities
         vx1 = ball1.dx * cos + ball1.dy * sin
         vy1 = ball1.dy * cos - ball1.dx * sin
         vx2 = ball2.dx * cos + ball2.dy * sin
         vy2 = ball2.dy * cos - ball2.dx * sin
         
-        # Swap x velocities
+        # swap x velocities
         vx1, vx2 = vx2, vx1
         
-        # Rotate velocities back
+        # rotate velocities back
         ball1.dx = vx1 * cos - vy1 * sin
         ball1.dy = vy1 * cos + vx1 * sin
         ball2.dx = vx2 * cos - vy2 * sin
         ball2.dy = vy2 * cos + vx2 * sin
         
-        # Move balls apart to prevent sticking
+        # move balls apart to prevent sticking
         overlap = 2 * ball_radius - distance
         ball1.x -= overlap * 0.5 * cos
         ball1.y -= overlap * 0.5 * sin
@@ -102,7 +102,7 @@ def check_collision(ball1, ball2):
         
         click_sound.play()
 
-# Create the balls
+# create the balls
 ball1 = Ball(width // 3, height // 2, BALL_COLOR1)
 ball2 = Ball(2 * width // 3, height // 2, BALL_COLOR2)
 
@@ -113,7 +113,7 @@ while running:
 
     screen.blit(background, (0, 0))
 
-    # Handle input for ball1 (WASD)
+    # handle input for ball 1 (WASD)
     keys = pygame.key.get_pressed()
     force_x1 = force_y1 = 0
     if keys[pygame.K_a]: force_x1 -= 1
@@ -121,23 +121,23 @@ while running:
     if keys[pygame.K_w]: force_y1 -= 1
     if keys[pygame.K_s]: force_y1 += 1
 
-    # Handle input for ball2 (Arrow keys)
+    # handle input for ball 2 (Arrow keys)
     force_x2 = force_y2 = 0
     if keys[pygame.K_LEFT]: force_x2 -= 1
     if keys[pygame.K_RIGHT]: force_x2 += 1
     if keys[pygame.K_UP]: force_y2 -= 1
     if keys[pygame.K_DOWN]: force_y2 += 1
 
-    # Apply forces and move balls
+    # apply forces and move balls
     ball1.apply_force(force_x1, force_y1)
     ball2.apply_force(force_x2, force_y2)
     ball1.move()
     ball2.move()
 
-    # Check for collision between balls
+    # check for collision between balls
     check_collision(ball1, ball2)
 
-    # Draw balls
+    # draw balls
     ball1.draw()
     ball2.draw()
 
