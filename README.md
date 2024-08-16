@@ -14,4 +14,4 @@ run using
 python3 app.py
 ```
 
-control ball 1 using WASD and ball 2 with the arrow keys. collisions make a satisfying click sound.
+control ball 1 using WASD and ball 2 with the arrow keys. 
