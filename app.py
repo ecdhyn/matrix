@@ -55,6 +55,7 @@ class Ball:
         self.x = max(ball_radius, min(width - ball_radius, self.x))
         self.y = max(ball_radius, min(height - ball_radius, self.y))
 
+    # need to modify to handle friction
     def apply_force(self, force_x, force_y):
         self.dx += force_x * self.acceleration
         self.dy += force_y * self.acceleration
