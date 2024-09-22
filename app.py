@@ -10,6 +10,11 @@ screen = pygame.display.set_mode((width, height))
 clock = pygame.time.Clock()
 running = True
 
+def render_score(score):
+    font = pygame.font.Font(None, 36)
+    text = font.render(f"Score: {score}", True, (255, 255, 255))
+    screen.blit(text, (10, 10))
+
 # the title of this application
 pygame.display.set_caption("let's bounce")
 
@@ -21,8 +26,8 @@ click_sound = pygame.mixer.Sound("click.wav")
 
 # ball parameters
 ball_radius = 20
-BALL_COLOR1 = (255, 255, 255)
-BALL_COLOR2 = (255, 255, 255) 
+BALL_COLOR2 = (41, 25, 150)
+BALL_COLOR1 = (235, 64, 52) 
 
 class Ball:
     def __init__(self, x, y, color):
@@ -69,6 +74,7 @@ class Ball:
         pygame.draw.circle(screen, self.color, (int(self.x), int(self.y)), ball_radius)
 
 def check_collision(ball1, ball2):
+    global score
     dx = ball2.x - ball1.x
     dy = ball2.y - ball1.y
     distance = math.sqrt(dx**2 + dy**2)
@@ -102,11 +108,15 @@ def check_collision(ball1, ball2):
         ball2.y += overlap * 0.5 * sin
         
         click_sound.play()
+        score += 1
+        render_score(score)
+    return score
 
 # create the balls
 ball1 = Ball(width // 3, height // 2, BALL_COLOR1)
 ball2 = Ball(2 * width // 3, height // 2, BALL_COLOR2)
 
+score = 0
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -136,12 +146,14 @@ while running:
     ball2.move()
 
     # check for collision between balls
-    check_collision(ball1, ball2)
+    score = check_collision(ball1, ball2)
+
 
     # draw balls
     ball1.draw()
     ball2.draw()
 
+    render_score(score)
     pygame.display.flip()
     clock.tick(60)
 
